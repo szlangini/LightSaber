@@ -7,6 +7,7 @@
 #include "utils/Query.h"
 #include "benchmarks/applications/ManufacturingEquipment/ManufacturingEquipment.h"
 
+
 class ME1 : public ManufacturingEquipment {
  private:
   void createApplication() override {
@@ -27,11 +28,17 @@ class ME1 : public ManufacturingEquipment {
     aggregationAttributes[1] = new ColumnReference(3, BasicType::Integer);
     aggregationAttributes[2] = new ColumnReference(4, BasicType::Integer);
 
+    // AVG over: mf01, mf02, mf03 all being ints
+
     std::vector<Expression *> groupByAttributes;
+
+    // No grouping
 
     auto window = new WindowDefinition(RANGE_BASED, 60, 1);
 
     Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
+
+    // Window Aggregation: Using a range-based, sliding window of size 60s and slide 1s, average over 1) mf01, 2) mf02 and 3) mf03 -- no need to group by
 
     bool replayTimestamps = window->isRangeBased();
 

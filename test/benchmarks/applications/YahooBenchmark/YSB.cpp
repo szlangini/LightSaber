@@ -150,11 +150,17 @@ class YSB : public YahooBenchmark {
 
     int incr = (m_is64) ? 0 : 1;
 
+    // indication whether or not to use a long instead of a longlong (128)
+
     auto window = new WindowDefinition(RANGE_BASED, 100, 100);
+
+    // Tumbling window 100, 100
 
     // Configure selection predicate
     auto predicate = new ComparisonPredicate(EQUAL_OP, new ColumnReference(5 + incr), new IntConstant(0));
     Selection *selection = new Selection(predicate);
+
+    // DEPENDING on m_is64 (usually false and then evaluates to 1) as they have different input schemas  but check if event_type == 0
 
     // Configure projection
     std::vector<Expression *> expressions(2);
@@ -162,6 +168,8 @@ class YSB : public YahooBenchmark {
     expressions[0] = new ColumnReference(0);
     expressions[1] = new ColumnReference(3 + incr);
     Projection *projection = new Projection(expressions, true);
+
+    // project: timestamp and ad_id
 
     // Configure static hashjoin
     auto staticSchema = createStaticSchema();
@@ -174,14 +182,20 @@ class YSB : public YahooBenchmark {
                                                     getStaticHashTable(),
                                                     getStaticComputation(window));
 
+    // hash join: windowed, join on 1. projection->getOutputSchema() => ad_id (projection) == timestamp (input relation)
+
     // Configure aggregation
     std::vector<AggregationType> aggregationTypes(2);
     aggregationTypes[0] = AggregationTypes::fromString("cnt");
     aggregationTypes[1] = AggregationTypes::fromString("max");
 
+    // count and max
+
     std::vector<ColumnReference *> aggregationAttributes(2);
     aggregationAttributes[0] = new ColumnReference(1 + incr, BasicType::Float);
     aggregationAttributes[1] = new ColumnReference(0, BasicType::Float);
+
+    // agg 1: float user_id and 2: float timestamp OR is that col 1 ad_id because of the projection?
 
     std::vector<Expression *> groupByAttributes(1);
     if (m_is64)
@@ -189,7 +203,13 @@ class YSB : public YahooBenchmark {
     else
       groupByAttributes[0] = new ColumnReference(4, BasicType::LongLong);
 
+    // group by: 64 -> ad_id
+
     Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
+
+    // Window Aggregation: Window is tumbling of size 100s. First check if eventtype == 0. Project timestamp and ad_id. hashjoin on  the projected ad_id and the timestamp of the input relation.
+    // agg, group by
+    // Note there are two different input schemas called 64 and 128. in the paper they say that they are using 128bit instead of JSON strings
 
     bool replayTimestamps = window->isRangeBased();
 

@@ -23,13 +23,20 @@ class SG2 : public SmartGrid {
     std::vector<ColumnReference *> aggregationAttributes(1);
     aggregationAttributes[0] = new ColumnReference(1, BasicType::Float);
 
+    // Average Aggregation over float value column
+
     std::vector<Expression *> groupByAttributes(3);
     groupByAttributes[0] = new ColumnReference(3, BasicType::Integer);
     groupByAttributes[1] = new ColumnReference(4, BasicType::Integer);
     groupByAttributes[2] = new ColumnReference(5, BasicType::Integer);
 
+    // group by: 1. plug 2. household 3. house
+
     auto window = new WindowDefinition(RANGE_BASED, 128, 1); //ROW_BASED, 36*1000, 1*1000);
     Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
+
+    // Aggregation: Range-based, sliding Window of size 128s and 1s Slide to get the average of values. grouped by 1. plug, 2. household, 3. house
+
 
     bool replayTimestamps = window->isRangeBased();
 

@@ -20,14 +20,23 @@ class CM1 : public ClusterMonitoring {
     std::vector<AggregationType> aggregationTypes(1);
     aggregationTypes[0] = AggregationTypes::fromString("sum");
 
+    // summe über etwas
+
     std::vector<ColumnReference *> aggregationAttributes(1);
     aggregationAttributes[0] = new ColumnReference(8, BasicType::Float);
+
+    // Float Col. CPU
 
     std::vector<Expression *> groupByAttributes(1);
     groupByAttributes[0] = new ColumnReference(6, BasicType::Integer);
 
+    // Groub By integer category
+
     auto window = new WindowDefinition(RANGE_BASED, 60, 1); // (RANGE_BASED, 60*25, 1*25)
     Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
+
+    // Window: RANGE_BASED is a value of an enum, 60: size, 1: Slide
+    // Aggregation: Use a range-based window of size 60 and slide 1 to make a sum over Column 8 beig float "CPU" and group Attributes by Column 6 being int Category
 
     bool replayTimestamps = window->isRangeBased();
 

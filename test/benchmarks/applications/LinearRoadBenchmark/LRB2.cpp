@@ -9,9 +9,14 @@
 #include "utils/Query.h"
 #include "benchmarks/applications/LinearRoadBenchmark/LinearRoadBenchmark.h"
 
+// adjustment imports in order to get the right output schema in the first query i write that to a file.
+#include <iostream>
+#include <fstream>
+
 class LRB2 : public LinearRoadBenchmark {
  private:
   void createApplication() override {
+    std::cout << "DAS IST EIN TEST" << std::endl;
     SystemConf::getInstance().SLOTS = 512;
     SystemConf::getInstance().PARTIAL_WINDOWS = 544;
     SystemConf::getInstance().HASH_TABLE_SIZE = 2 * 1024;
@@ -28,15 +33,22 @@ class LRB2 : public LinearRoadBenchmark {
     std::vector<ColumnReference *> _aggregationAttributes(1);
     _aggregationAttributes[0] = new ColumnReference(2, BasicType::Float);
 
+    // count aggregation on speed
+
     std::vector<Expression *> _groupByAttributes(4);
     _groupByAttributes[0] = new ColumnReference(1, BasicType::Integer);
     _groupByAttributes[1] = new ColumnReference(3, BasicType::Integer);
     _groupByAttributes[2] = new ColumnReference(5, BasicType::Integer);
     _groupByAttributes[3] = segmentExpr;
 
+    // group by 1. vehicle ,2. highway, 3. direction, 4. division by position and 5280
+
     auto _window = new WindowDefinition(RANGE_BASED, 30, 1); //(ROW_BASED, 30*1000, 1*1000);
     Aggregation
         *_aggregation = new Aggregation(*_window, _aggregationTypes, _aggregationAttributes, _groupByAttributes);
+
+    // Window Aggregation: Range-based, sliding window of size 30s and slide 1s, count on speed, grouped by 1. vehicle ,2. highway, 3. direction, 4. position/5280
+
 
     bool replayTimestamps = _window->isRangeBased();
 
@@ -51,6 +63,7 @@ class LRB2 : public LinearRoadBenchmark {
 
     // Print operator
     std::cout << _cpuCode->toSExpr() << std::endl;
+    std::cout << "DAS IST EIN TEST" << std::endl;
     auto _queryOperator = new QueryOperator(*_cpuCode);
     std::vector<QueryOperator *> _operators;
     _operators.push_back(_queryOperator);
@@ -77,19 +90,36 @@ class LRB2 : public LinearRoadBenchmark {
     std::vector<AggregationType> aggregationTypes_(1);
     aggregationTypes_[0] = AggregationTypes::fromString("cnt");
 
+    // count aggregation
+
     std::vector<ColumnReference *> aggregationAttributes_(1);
     aggregationAttributes_[0] = new ColumnReference(2, BasicType::Float);
+
+    // agg on float speed
 
     std::vector<Expression *> groupByAttributes_(3);
     groupByAttributes_[0] = new ColumnReference(2, BasicType::Integer);
     groupByAttributes_[1] = new ColumnReference(3, BasicType::Integer);
     groupByAttributes_[2] = new ColumnReference(4, BasicType::Integer);
 
+    // groupby:
+
     auto window_ = new WindowDefinition(ROW_BASED, 1024, 1024);
     Aggregation
         *aggregation_ = new Aggregation(*window_, aggregationTypes_, aggregationAttributes_, groupByAttributes_);
 
-    TupleSchema *schema_ = &(((OperatorKernel *) _cpuCode)->getOutputSchema());
+    // Window Aggregation: Tumbling Window Size and Slide 1024s, counting float speed grouped by: 1. Speed??, 2. Highway, 3. Lane
+
+        TupleSchema *schema_ = &(((OperatorKernel *) _cpuCode)->getOutputSchema());
+        cout << "\n \n \n \n \n \n Ü";
+        cout << schema_.getSchema();
+        cout << "\n \n \n \n \n \n";
+
+        ofstream myfile;
+        myfile.open ("schema_example.txt");
+        myfile << schema_.getSchema();
+        myfile.close();
+
 
     // Set up code-generated operator
     OperatorKernel *genCode_ = new OperatorKernel(true);

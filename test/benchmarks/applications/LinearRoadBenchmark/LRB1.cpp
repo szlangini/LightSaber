@@ -13,7 +13,7 @@
 class LRB1 : public LinearRoadBenchmark {
  private:
   void createApplication() override {
-    SystemConf::getInstance().SLOTS = 128;
+    SystemConf::getInstance().SLOTS = 128; // was bedeutet das?
     SystemConf::getInstance().PARTIAL_WINDOWS = 550; //320;
     //SystemConf::getInstance().HASH_TABLE_SIZE = 256;
 
@@ -24,22 +24,30 @@ class LRB1 : public LinearRoadBenchmark {
 
     // Configure second query
     std::vector<AggregationType> aggregationTypes(1);
-    aggregationTypes[0] = AggregationTypes::fromString("avg");
+    aggregationTypes[0] = AggregationTypes::fromString("avg"); // was genau ist das für eine query mit aggregation? was passiert hier genau
 
     std::vector<ColumnReference *> aggregationAttributes(1);
     aggregationAttributes[0] = new ColumnReference(2, BasicType::Float);
+
+    // AVG on speed
 
     std::vector<Expression *> groupByAttributes(3);
     groupByAttributes[0] = new ColumnReference(3, BasicType::Integer);
     groupByAttributes[1] = new ColumnReference(5, BasicType::Integer);
     groupByAttributes[2] = segmentExpr;
 
-    auto window = new WindowDefinition(RANGE_BASED, 300, 1); //(ROW_BASED, 300*80, 1*80);
+    // group by 1. highway, 2. direction
+
+    auto window = new WindowDefinition(RANGE_BASED, 300, 1); //(ROW_BASED, 300*80, 1*80); // was sind 300 und 1?
     Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
+
+    // Window Aggregation: Range-based, sliding window, avg of speed, grouped by 1. highway, 2. direction and 3. division expression with position and 5280
 
     // Configure third query
     auto predicate = new ComparisonPredicate(LESS_OP, new ColumnReference(4), new IntConstant(40));
     Selection *selection = new Selection(predicate);
+
+    // check average speed < 40   Col 4 refers to the output columns
 
     bool replayTimestamps = window->isRangeBased();
 

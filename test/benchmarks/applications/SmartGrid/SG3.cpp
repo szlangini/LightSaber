@@ -16,6 +16,8 @@ class SG3 : public SmartGrid {
     auto predicate = new ComparisonPredicate(EQUAL_OP, new ColumnReference(4), new IntConstant(3));
     Selection *selection = new Selection(predicate);
 
+    // Filter on int household == 3
+
     // Configure second query
     std::vector<AggregationType> aggregationTypes(1);
     aggregationTypes[0] = AggregationTypes::fromString("avg");
@@ -23,10 +25,14 @@ class SG3 : public SmartGrid {
     std::vector<ColumnReference *> aggregationAttributes(1);
     aggregationAttributes[0] = new ColumnReference(1, BasicType::Float);
 
+    // Avg on Value
+
     std::vector<Expression *> groupByAttributes(3);
     groupByAttributes[0] = new ColumnReference(3, BasicType::Integer);
     groupByAttributes[1] = new ColumnReference(4, BasicType::Integer);
     groupByAttributes[2] = new ColumnReference(5, BasicType::Integer);
+
+
 
     auto window = new WindowDefinition(RANGE_BASED, 3600, 1);
     Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
