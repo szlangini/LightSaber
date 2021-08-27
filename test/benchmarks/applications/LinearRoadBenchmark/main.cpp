@@ -20,4 +20,6 @@ int main(int argc, const char **argv) {
   }
 
   return benchmarkQuery->runBenchmark();
+
+  return 0;
 }
