@@ -111,13 +111,13 @@ class LRB2 : public LinearRoadBenchmark {
     // Window Aggregation: Tumbling Window Size and Slide 1024s, counting float speed grouped by: 1. Speed??, 2. Highway, 3. Lane
 
         TupleSchema *schema_ = &(((OperatorKernel *) _cpuCode)->getOutputSchema());
-        cout << "\n \n \n \n \n \n Ü";
-        cout << schema_.getSchema();
-        cout << "\n \n \n \n \n \n";
+        std::cout << "\n \n \n \n \n \n Ü";
+        std::cout << schema_->getSchema();
+        std::cout << "\n \n \n \n \n \n";
 
-        ofstream myfile;
+        std::ofstream myfile;
         myfile.open ("schema_example.txt");
-        myfile << schema_.getSchema();
+        myfile << schema_->getSchema();
         myfile.close();
 
 
