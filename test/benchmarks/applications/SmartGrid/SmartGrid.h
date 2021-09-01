@@ -64,6 +64,7 @@ class SmartGrid : public BenchmarkQuery {
     std::string line;
     std::cout << "\n \n \n \n \n \n Ü";
     std::cout << "size of the InputSchema: " << sizeof(InputSchema);
+    std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
     std::cout << "\n \n \n \n \n \n";
 
     unsigned long idx = 0;
