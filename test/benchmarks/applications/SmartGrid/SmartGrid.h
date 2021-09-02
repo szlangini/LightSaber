@@ -46,7 +46,7 @@ class SmartGrid : public BenchmarkQuery {
   TupleSchema *m_schema = nullptr;
   QueryApplication *m_application = nullptr;
   std::vector<char> *m_data = nullptr;
-  bool m_debug = false;
+  bool m_debug = true;
 
   QueryApplication *getApplication() override {
     return m_application;
