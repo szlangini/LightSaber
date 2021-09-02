@@ -8,7 +8,7 @@
 int main(int argc, const char **argv) {
   BenchmarkQuery *benchmarkQuery = nullptr;
 
-  SystemConf::getInstance().QUERY_NUM = 1;
+  SystemConf::getInstance().QUERY_NUM = 2;
   BenchmarkQuery::parseCommandLineArguments(argc, argv);
 
   if (SystemConf::getInstance().QUERY_NUM == 1) {

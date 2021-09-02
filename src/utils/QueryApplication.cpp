@@ -18,6 +18,11 @@ QueryApplication::QueryApplication(std::vector<std::shared_ptr<Query>> &queries)
       m_workerPool(std::make_shared<TaskProcessorPool>(m_numOfThreads, m_queue)) {}
 
 void QueryApplication::processData(std::vector<char> &values, long latencyMark) {
+  std::cout << "\n \n \n \n \n \n";
+  std::cout << "DISPATCHER:   XXX";
+  std::cout << "Dispatcher size: " << m_dispatchers.size();
+  std::cout << "Process data values.data size: " << sizeof(values.data());
+  std::cout << "\n \n \n \n \n \n";
   for (unsigned long i = 0; i < m_dispatchers.size(); ++i) {
     m_dispatchers[i]->dispatch(values.data(), values.size(), latencyMark);
   }
