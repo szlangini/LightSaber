@@ -44,7 +44,7 @@ class LinearRoadBenchmark : public BenchmarkQuery {
   TupleSchema *m_schema = nullptr;
   QueryApplication *m_application = nullptr;
   std::vector<char> *m_data = nullptr;
-  bool m_debug = false;
+  bool m_debug = true;
   std::string m_fileName;
 
   QueryApplication *getApplication() override {

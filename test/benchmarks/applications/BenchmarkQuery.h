@@ -74,6 +74,9 @@ class BenchmarkQuery {
   int runBenchmark(bool terminate = true) {
     auto t1 = std::chrono::high_resolution_clock::now();
     auto inputBuffer = getInMemoryData();
+    std::cout << "\n \n \n \n \n \n";
+    std::cout << "size of inputBuffer: " << sizeof(InputSchema) << " Byte \n";
+    std::cout << "\n \n \n \n \n \n";
     auto application = getApplication();
     if (SystemConf::getInstance().LATENCY_ON) {
       SystemConf::getInstance().DURATION = m_duration - 3;

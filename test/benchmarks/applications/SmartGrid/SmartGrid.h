@@ -62,12 +62,13 @@ class SmartGrid : public BenchmarkQuery {
     std::string filePath = Utils::GetHomeDir() + "/LightSaber/resources/datasets/smartgrid/";
     std::ifstream file(filePath + "smartgrid-data.txt");
     std::string line;
-    std::cout << "\n \n \n \n \n \n Ü";
-    std::cout << "size of the InputSchema: " << sizeof(InputSchema);
+    std::cout << "\n \n \n \n \n \n";
+    std::cout << "size of the InputSchema: " << sizeof(InputSchema) << " Byte \n";
     std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
     std::cout << "\n \n \n \n \n \n";
 
     unsigned long idx = 0;
+    // Das sieht mir hier nach nur einem thread aus.
     while (std::getline(file, line) && idx < len / sizeof(InputSchema)) {
       InputSchema::parse(buf[idx], line, normalisedTimestamp);
       idx++;
