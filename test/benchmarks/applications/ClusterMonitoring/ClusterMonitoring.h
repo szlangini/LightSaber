@@ -70,6 +70,11 @@ class ClusterMonitoring : public BenchmarkQuery {
     std::string filePath = Utils::GetHomeDir() + "/LightSaber/resources/datasets/google-cluster-data/";
     std::ifstream file(filePath + "google-cluster-data.txt");
     std::string line;
+
+    std::cout << "\n \n \n \n \n \n";
+    std::cout << "size of the InputSchema: " << sizeof(InputSchema) << " Byte \n";
+    std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
+    std::cout << "\n \n \n \n \n \n";
     unsigned long idx = 0;
     while (std::getline(file, line) && idx < len / sizeof(InputSchema)) {
       InputSchema::parse(buf[idx], line);
