@@ -123,7 +123,8 @@ class YahooBenchmark : public BenchmarkQuery {
 
     std::string line;
     std::cout << "\n \n \n \n \n \n";
-    std::cout << "size of the InputSchema: " << sizeof(InputSchema) << " Byte \n";
+    std::cout << "size of the InputSchema64: " << sizeof(InputSchema_64) << " Byte \n";
+    std::cout << "size of the InputSchema128: " << sizeof(InputSchema_64) << " Byte \n";
     std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
     std::cout << "\n \n \n \n \n \n";
     auto user_id = distr(eng);
