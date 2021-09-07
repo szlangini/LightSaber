@@ -19,7 +19,6 @@ QueryApplication::QueryApplication(std::vector<std::shared_ptr<Query>> &queries)
 
 void QueryApplication::processData(std::vector<char> &values, long latencyMark) {
   std::cout << "\n \n \n \n \n \n";
-  std::cout << ""
   std::cout << "DISPATCHER:   XXX";
   std::cout << "Dispatcher size: " << m_dispatchers.size();
   std::cout << "Process data values.data size: " << sizeof(values.data());
