@@ -28,6 +28,7 @@ void QueryApplication::processData(std::vector<char> &values, long latencyMark) 
 
   for (unsigned long i = 0; i < m_dispatchers.size(); ++i) {
     m_dispatchers[i]->dispatch(values.data(), values.size(), latencyMark);
+    // Merkwürdig warum bekommt jeder dispatcher die selben daten?
   }
 }
 

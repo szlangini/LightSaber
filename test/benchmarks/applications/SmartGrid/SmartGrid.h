@@ -63,6 +63,8 @@ class SmartGrid : public BenchmarkQuery {
     std::ifstream file(filePath + "smartgrid-data.txt");
     std::string line;
     std::cout << "\n \n \n \n \n \n";
+    std::cout << "BUNDLE_SIZE: " << SystemConf::getInstance().BUNDLE_SIZE << " Byte \n";
+    std::cout << "BATCH_SIZE: " << SystemConf::getInstance().BATCH_SIZE << " Byte \n";
     std::cout << "size of the InputSchema: " << sizeof(InputSchema) << " Byte \n";
     std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
     std::cout << "\n \n \n \n \n \n";
