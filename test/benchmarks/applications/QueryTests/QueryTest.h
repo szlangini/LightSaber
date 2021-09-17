@@ -24,6 +24,7 @@ class QueryTest : public BenchmarkQuery {
     uint64_t timestamp;
 
     static void parse(InputSchema &tuple, std::string &line) {
+      // Parsing works!!
       std::istringstream iss(line);
       std::vector<std::string> words{std::istream_iterator<std::string>{iss},
                                      std::istream_iterator<std::string>{}};
@@ -94,7 +95,7 @@ class QueryTest : public BenchmarkQuery {
   void createSchema() {
     m_schema = new TupleSchema(4, "QueryTest");
     auto longAttr = AttributeType(BasicType::Long);
-
+// Any idea on how to declare this as uint64_t?
     m_schema->setAttributeType(0, longAttr);  /*      id:  long */
     m_schema->setAttributeType(1, longAttr);  /*      value:  long */
     m_schema->setAttributeType(2, longAttr);  /*      payload:  long */
