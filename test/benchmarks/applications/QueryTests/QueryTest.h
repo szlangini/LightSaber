@@ -50,28 +50,32 @@ class QueryTest : public BenchmarkQuery {
   virtual void createApplication() = 0;
 
   void loadInMemoryData() {
-    // hier muss der generator hin.
-    //size_t recordSize = m_schema->getTupleSize();
-
+    // O.K.
     size_t len = SystemConf::getInstance().BUNDLE_SIZE;
     m_data = new std::vector<char>(len);
     auto buf = (InputSchema *) m_data->data();
 
+    unsigned long idx = 0;
+    while (idx < len / sizeof(InputSchema)) {
+      buf[idx].id = idx;
+      buf[idx].value = idx%100;
+      buf[idx].payload = idx;
+      buf[idx].timestamp = idx;
+      idx++;
+    }
+
+    // read from file if wanted:
+    /*
     std::string filePath = Utils::GetHomeDir() + "/LightSaber/resources/datasets/generated_data/";
     std::ifstream file(filePath + "filter-sink-data.txt");
     std::string line;
-    /*
-    std::cout << "\n \n \n \n \n \n";
-    std::cout << "size of the InputSchema: " << sizeof(InputSchema) << " Byte \n";
-    std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
-    std::cout << "\n \n \n \n \n \n";
-    */
+
     unsigned long idx = 0;
     while (std::getline(file, line) && idx < len / sizeof(InputSchema)) {
       InputSchema::parse(buf[idx], line);
       idx++;
     }
-
+    */
     if (m_debug) {
       std::cout << "id value payload timestamp" << std::endl;
       for (unsigned long i = 0; i < m_data->size() / sizeof(InputSchema); ++i) {

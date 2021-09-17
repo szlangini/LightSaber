@@ -18,27 +18,14 @@ class FS1 : public QueryTest {
   void createApplication() override {
 
     // TODO: Add Tuple Generator
-    // TODO : Add Sink
-    // TODO : Check if all properties of this query are set properly
-    // TODO: Check if CMakeList.txt contains all necessary information
+    // TODO: Add Sink
     // TODO: Window => is it okay like this? I just took an arbitrary one as it was needed by Query constructor
     // TODO: Start with more than 1 thread via CLA
     // TODO: Performance test on copyData -- copy FS1 and run with different query constructor
+    // TODO: Add script to automatically start this benchmark :)
 
 
     // Query::from("input").filter(Attribute("value") > 10000).sink(NullOutputSinkDescriptor::create());
-
-
-
-    /* Consider including this t.b.d. with Steffen.
-    SystemConf::getInstance().SLOTS = 256;
-    SystemConf::getInstance().PARTIAL_WINDOWS = 256;
-    SystemConf::getInstance().HASH_TABLE_SIZE = 32;
-
-    */
-
-   // bool useParallelMerge = SystemConf::getInstance().PARALLEL_MERGE_ON; // Discuss this
-    //bool replayTimestamps = false; //discuss this
 
     // Configure first query
     auto predicate = new ComparisonPredicate(GREATER_OP, new ColumnReference(1), new IntConstant(1000000000));
