@@ -38,6 +38,7 @@ TaskDispatcher::TaskDispatcher(Query &query, QueryBuffer &buffer,
 
 void TaskDispatcher::dispatch(char *data, int length, long latencyMark) {
   long idx;
+  // das könnte ein copy sein - überprüfen in CircularWQueryBuffer.h
   while ((idx = m_buffer.put(data, length, latencyMark)) < 0) {
     _mm_pause();
     // std::cout << "Failed to dispatch..." << std::endl;
@@ -108,7 +109,7 @@ void TaskDispatcher::assemble(long index, int length) {
     m_nextBatchEndPointer += m_batchSize;
   }
 }
-
+// hier werden die timestamps verändert.
 void TaskDispatcher::newTaskFor(long p, long q, long free, long b_, long _d) {
   int taskId = getTaskNumber();
   long size = 0;

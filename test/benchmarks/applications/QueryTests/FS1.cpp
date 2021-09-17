@@ -1,3 +1,6 @@
+//
+// Created by Vincent Szlang on 16.09.21.
+//
 #include "cql/operators/AggregationType.h"
 #include "cql/expressions/ColumnReference.h"
 #include "utils/WindowDefinition.h"
@@ -5,45 +8,32 @@
 #include "cql/operators/codeGeneration/OperatorKernel.h"
 #include "utils/QueryOperator.h"
 #include "utils/Query.h"
-#include "benchmarks/applications/ClusterMonitoring/ClusterMonitoring.h"
+#include "benchmarks/applications/ManufacturingEquipment/ManufacturingEquipment.h"
 
-class CM1 : public ClusterMonitoring {
+
+class FS1 : public QueryTest {
  private:
   void createApplication() override {
-    SystemConf::getInstance().SLOTS = 256;
-    SystemConf::getInstance().PARTIAL_WINDOWS = 288; // change this depending on the batch size
-    SystemConf::getInstance().HASH_TABLE_SIZE = 8;
+    // Query::from("input").filter(Attribute("value") > 10000).sink(NullOutputSinkDescriptor::create());
 
-    bool useParallelMerge = SystemConf::getInstance().PARALLEL_MERGE_ON;
+    /* Consider including this t.b.d. with Steffen.
+    SystemConf::getInstance().SLOTS = 256;
+    SystemConf::getInstance().PARTIAL_WINDOWS = 256;
+    SystemConf::getInstance().HASH_TABLE_SIZE = 32;
+
+    */
+
+    bool useParallelMerge = SystemConf::getInstance().PARALLEL_MERGE_ON; // Discuss this
+    bool replayTimestamps = false; /discuss this
 
     // Configure first query
-    std::vector<AggregationType> aggregationTypes(1);
-    aggregationTypes[0] = AggregationTypes::fromString("sum");
-
-    // summe über etwas
-
-    std::vector<ColumnReference *> aggregationAttributes(1);
-    aggregationAttributes[0] = new ColumnReference(8, BasicType::Float);
-
-    // Float Col. CPU
-
-    std::vector<Expression *> groupByAttributes(1);
-    groupByAttributes[0] = new ColumnReference(6, BasicType::Integer);
-
-    // Group By integer category
-
-    auto window = new WindowDefinition(RANGE_BASED, 60, 1); // (RANGE_BASED, 60*25, 1*25)
-    Aggregation *aggregation = new Aggregation(*window, aggregationTypes, aggregationAttributes, groupByAttributes);
-
-    // Window: RANGE_BASED is a value of an enum, 60: size, 1: Slide
-    // Aggregation: Use a range-based window of size 60 and slide 1 to make a sum over Column 8 beig float "CPU" and group Attributes by Column 6 being int Category
-
-    bool replayTimestamps = window->isRangeBased();
+    auto predicate = new ComparisonPredicate(GREATER_OP, new ColumnReference(1), new IntConstant(1000000000));
+    Selection *selection = new Selection(predicate);
 
     // Set up code-generated operator
     OperatorKernel *genCode = new OperatorKernel(true, true, useParallelMerge);
     genCode->setInputSchema(getSchema());
-    genCode->setAggregation(aggregation);
+    genCode->setSelection(selection);
     genCode->setQueryId(0);
     genCode->setup();
     OperatorCode *cpuCode = genCode;
@@ -55,13 +45,13 @@ class CM1 : public ClusterMonitoring {
     std::vector<QueryOperator *> operators;
     operators.push_back(queryOperator);
 
-    // used for latency measurements
+    // this is used for latency measurements
     m_timestampReference = std::chrono::system_clock::now().time_since_epoch().count();
 
     std::vector<std::shared_ptr<Query>> queries(1);
     queries[0] = std::make_shared<Query>(0,
                                          operators,
-                                         *window,
+                                         nullptr,
                                          m_schema,
                                          m_timestampReference,
                                          true,
@@ -71,11 +61,12 @@ class CM1 : public ClusterMonitoring {
 
     m_application = new QueryApplication(queries);
     m_application->setup();
+
   }
 
  public:
-  CM1(bool inMemory = true) {
-    m_name = "CM1";
+  FS1(bool inMemory = true) {
+    m_name = "FS1";
     createSchema();
     createApplication();
     if (inMemory)
