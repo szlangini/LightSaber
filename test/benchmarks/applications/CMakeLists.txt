@@ -121,6 +121,21 @@ target_link_libraries(yahoo_benchmark
         pthread dl)
 target_compile_options(yahoo_benchmark PRIVATE -Wall -Wextra -O3 -march=native)
 
+# Query Test -- needs some discussion
+add_executable(querytest
+        QueryTests/main.cpp
+        ${CPP_FILES}
+        )
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    target_link_libraries(querytest ${Boost_LIBRARIES})
+endif ()
+target_link_libraries(querytest
+        operatorJITLib
+        boost_fiber
+        tbb
+        pthread dl)
+target_compile_options(querytest PRIVATE -Wall -Wextra -O3 -march=native)
 
 # Smart Grid
 add_executable(smartgrid
