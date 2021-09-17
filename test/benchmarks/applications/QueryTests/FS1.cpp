@@ -30,6 +30,10 @@ class FS1 : public QueryTest {
     auto predicate = new ComparisonPredicate(GREATER_OP, new ColumnReference(1), new IntConstant(1000000000));
     Selection *selection = new Selection(predicate);
 
+    // Needs a window....
+    auto window = new WindowDefinition(RANGE_BASED, 3000, 1); // (RANGE_BASED, 60*25, 1*25)
+
+
     // Set up code-generated operator
     OperatorKernel *genCode = new OperatorKernel(true, true, useParallelMerge);
     genCode->setInputSchema(getSchema());
@@ -51,7 +55,7 @@ class FS1 : public QueryTest {
     std::vector<std::shared_ptr<Query>> queries(1);
     queries[0] = std::make_shared<Query>(0,
                                          operators,
-                                         nullptr,
+                                         window,
                                          m_schema,
                                          m_timestampReference,
                                          true,
