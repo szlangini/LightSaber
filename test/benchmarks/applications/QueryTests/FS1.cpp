@@ -23,8 +23,8 @@ class FS1 : public QueryTest {
 
     */
 
-    bool useParallelMerge = SystemConf::getInstance().PARALLEL_MERGE_ON; // Discuss this
-    bool replayTimestamps = false; //discuss this
+   // bool useParallelMerge = SystemConf::getInstance().PARALLEL_MERGE_ON; // Discuss this
+    //bool replayTimestamps = false; //discuss this
 
     // Configure first query
     auto predicate = new ComparisonPredicate(GREATER_OP, new ColumnReference(1), new IntConstant(1000000000));
@@ -35,7 +35,7 @@ class FS1 : public QueryTest {
 
 
     // Set up code-generated operator
-    OperatorKernel *genCode = new OperatorKernel(true, true, useParallelMerge);
+    OperatorKernel *genCode = new OperatorKernel(true);
     genCode->setInputSchema(getSchema());
     genCode->setSelection(selection);
     genCode->setQueryId(0);
@@ -53,15 +53,8 @@ class FS1 : public QueryTest {
     m_timestampReference = std::chrono::system_clock::now().time_since_epoch().count();
 
     std::vector<std::shared_ptr<Query>> queries(1);
-    queries[0] = std::make_shared<Query>(0,
-                                         operators,
-                                         window,
-                                         m_schema,
-                                         m_timestampReference,
-                                         true,
-                                         replayTimestamps,
-                                         !replayTimestamps,
-                                         useParallelMerge);
+    queries[0] = std::make_shared<Query>(0, operators, *window, m_schema, timestampReference, false, false, true);
+
 
     m_application = new QueryApplication(queries);
     m_application->setup();
