@@ -126,13 +126,16 @@ add_executable(querytest
         QueryTests/main.cpp
         ${CPP_FILES}
         )
+target_link_options(querytest PRIVATE -Wl,--unresolved-symbols=ignore-all)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     target_link_libraries(querytest ${Boost_LIBRARIES})
 endif ()
 target_link_libraries(querytest
-        operatorJITLib
+        z
+        boost_iostreams
         boost_fiber
+        operatorJITLib
         tbb
         pthread dl)
 target_compile_options(querytest PRIVATE -Wall -Wextra -O3 -march=native)
