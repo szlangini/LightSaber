@@ -6,9 +6,11 @@
 #include "utils/WindowDefinition.h"
 #include "cql/operators/Aggregation.h"
 #include "cql/operators/codeGeneration/OperatorKernel.h"
+#include "cql/expressions/IntConstant.h"
 #include "utils/QueryOperator.h"
 #include "utils/Query.h"
 #include "benchmarks/applications/QueryTests/QueryTest.h"
+
 
 
 class FS1 : public QueryTest {
@@ -53,7 +55,7 @@ class FS1 : public QueryTest {
     m_timestampReference = std::chrono::system_clock::now().time_since_epoch().count();
 
     std::vector<std::shared_ptr<Query>> queries(1);
-    queries[0] = std::make_shared<Query>(0, operators, *window, m_schema, timestampReference, false, false, true);
+    queries[0] = std::make_shared<Query>(0, operators, *window, m_schema, m_timestampReference, false, false, true);
 
 
     m_application = new QueryApplication(queries);
