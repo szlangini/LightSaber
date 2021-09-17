@@ -14,6 +14,8 @@
 #include "utils/QueryApplication.h"
 #include "utils/Utils.h"
 #include "benchmarks/applications/BenchmarkQuery.h"
+#include "cql/predicates/ComparisonPredicate.h"
+
 
 class QueryTest : public BenchmarkQuery {
  private:
