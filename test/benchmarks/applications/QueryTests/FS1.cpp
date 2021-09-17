@@ -8,7 +8,7 @@
 #include "cql/operators/codeGeneration/OperatorKernel.h"
 #include "utils/QueryOperator.h"
 #include "utils/Query.h"
-#include "benchmarks/applications/ManufacturingEquipment/ManufacturingEquipment.h"
+#include "benchmarks/applications/QueryTests/QueryTest.h"
 
 
 class FS1 : public QueryTest {
@@ -24,7 +24,7 @@ class FS1 : public QueryTest {
     */
 
     bool useParallelMerge = SystemConf::getInstance().PARALLEL_MERGE_ON; // Discuss this
-    bool replayTimestamps = false; /discuss this
+    bool replayTimestamps = false; //discuss this
 
     // Configure first query
     auto predicate = new ComparisonPredicate(GREATER_OP, new ColumnReference(1), new IntConstant(1000000000));
