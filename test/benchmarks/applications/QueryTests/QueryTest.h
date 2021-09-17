@@ -73,7 +73,7 @@ class QueryTest : public BenchmarkQuery {
       std::cout << "id value payload timestamp" << std::endl;
       for (unsigned long i = 0; i < m_data->size() / sizeof(InputSchema); ++i) {
         printf("[DBG] %09d: %7d %13d %8d %13d \n",
-               i, buf[i].id, buf[i].value, buf[i].payload, buf[i].timestamp;
+               i, buf[i].id, buf[i].value, buf[i].payload, buf[i].timestamp);
       }
     }
   };
