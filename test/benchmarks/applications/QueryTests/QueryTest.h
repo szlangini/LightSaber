@@ -20,10 +20,10 @@
 class QueryTest : public BenchmarkQuery {
  private:
   struct InputSchema {
-    uint64_t id;
-    uint64_t value;
-    uint64_t payload;
-    uint64_t timestamp;
+    int64_t id;
+    int64_t value;
+    int64_t payload;
+    int64_t timestamp;
 
     static void parse(InputSchema &tuple, std::string &line) {
       // Parsing works!!
@@ -60,11 +60,12 @@ class QueryTest : public BenchmarkQuery {
     std::string filePath = Utils::GetHomeDir() + "/LightSaber/resources/datasets/generated_data/";
     std::ifstream file(filePath + "filter-sink-data.txt");
     std::string line;
-
+    /*
     std::cout << "\n \n \n \n \n \n";
     std::cout << "size of the InputSchema: " << sizeof(InputSchema) << " Byte \n";
     std::cout << "number of worker threads: " << SystemConf::getInstance().WORKER_THREADS;
     std::cout << "\n \n \n \n \n \n";
+    */
     unsigned long idx = 0;
     while (std::getline(file, line) && idx < len / sizeof(InputSchema)) {
       InputSchema::parse(buf[idx], line);

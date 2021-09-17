@@ -90,6 +90,6 @@ ENV PATH=/usr/lib/ccache:$PATH
 
 
 RUN cd && \
-    git clone https://github.com/szlangini/LightSaber.git                                  && \
+    git clone https://github.com/szlangini/LightSaber.git                                     && \
     cd LightSaber && \
     ./scripts/build.sh
