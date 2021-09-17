@@ -26,7 +26,6 @@ class QueryTest : public BenchmarkQuery {
     int64_t timestamp;
 
     static void parse(InputSchema &tuple, std::string &line) {
-      // Parsing works!!
       std::istringstream iss(line);
       std::vector<std::string> words{std::istream_iterator<std::string>{iss},
                                      std::istream_iterator<std::string>{}};

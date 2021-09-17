@@ -13,16 +13,12 @@
 
 
 
-class FS1 : public QueryTest {
+class FS2 : public QueryTest {
  private:
   void createApplication() override {
 
-    // TODO: Performance test on copyData -- copy FS1 and run with different query constructor
-    // TODO: Add script to automatically start this benchmark (need to wait for my ubuntu machine -- will deliver this next week)
-
-
-    // to run more than one thread when executing: ./querytest threads 5
-    // Query::from("input").filter(Attribute("value") > 10000).sink(NullOutputSinkDescriptor::create());
+    // same query as in FS1 but WITH a deep copy of the data instead of passing a pointer.
+    // this is achieved by setting true for the parameter "copyDataOnInsert" in the query constructor.
 
     // Configure first query
     auto predicate = new ComparisonPredicate(GREATER_OP, new ColumnReference(1), new IntConstant(1000000000));
@@ -51,7 +47,7 @@ class FS1 : public QueryTest {
     m_timestampReference = std::chrono::system_clock::now().time_since_epoch().count();
 
     std::vector<std::shared_ptr<Query>> queries(1);
-    queries[0] = std::make_shared<Query>(0, operators, *window, m_schema, m_timestampReference, false, false, false);
+    queries[0] = std::make_shared<Query>(0, operators, *window, m_schema, m_timestampReference, false, false, true);
 
     m_application = new QueryApplication(queries);
     m_application->setup();
@@ -59,8 +55,8 @@ class FS1 : public QueryTest {
   }
 
  public:
-  FS1(bool inMemory = true) {
-    m_name = "FS1";
+  FS2(bool inMemory = true) {
+    m_name = "FS2";
     createSchema();
     createApplication();
     if (inMemory)
